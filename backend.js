@@ -69,10 +69,10 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
 
         res.json({ success: true, htmlFileUrl: '/resume.html' });
     } catch (error) {
-        console.error('Error processing request:', error); // Log the error
+        console.error('Error processing request:', error); // Log the full error
 
-        // Handle OpenAI API errors
         if (error.response) {
+            // Handle OpenAI API errors
             const status = error.response.status;
             const message = error.response.data.error.message;
             if (status === 401 || status === 403) {
@@ -84,7 +84,7 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
         }
 
         // Handle other errors
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
 
