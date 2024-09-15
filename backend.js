@@ -22,9 +22,12 @@ function estimateTokenCount(text) {
 // Endpoint to handle file upload and OpenAI processing
 app.post('/api/upload', upload.single('pdf'), async (req, res) => {
     try {
+        console.log('Received file:', req.file);
+        
         const pdfPath = path.resolve(__dirname, 'uploads', req.file.filename);
 
         if (!fs.existsSync(pdfPath)) {
+            console.error('File not found:', pdfPath);
             return res.status(404).json({ success: false, message: 'Uploaded file not found' });
         }
 
@@ -34,6 +37,7 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
 
         const apiKey = req.body.apiKey;
         if (!apiKey) {
+            console.error('API key is missing');
             return res.status(400).json({ success: false, message: 'API key is required' });
         }
 
@@ -42,6 +46,7 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
         const tokenUsageThreshold = 0.5 * tokenLimit;
 
         if (estimatedTokenCount > tokenUsageThreshold) {
+            console.error('Token limit exceeded:', estimatedTokenCount);
             return res.status(400).json({ success: false, message: 'Text content is too large to process within the token limit.' });
         }
 
@@ -69,6 +74,7 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
 
         res.json({ success: true, htmlFileUrl: '/resume.html' });
     } catch (error) {
+        console.error('Error processing request:', error);
         if (error.code === 'insufficient_quota') {
             res.status(429).json({ success: false, message: 'OpenAI API quota exceeded. Please try again later.' });
         } else {
