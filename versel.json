@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "backend.js",
+        "use": "@vercel/node",
+        "config": { "maxLambdaSize": "50mb" }
+      },
+      {
+        "src": "User_interface/**/*",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "User_interface/$1" },
+      { "src": "/api/(.*)", "dest": "/backend.js" }
+    ]
+  }
+  

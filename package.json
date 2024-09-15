@@ -1,0 +1,27 @@
+{
+  "name": "verbaflo_assignment",
+  "version": "1.0.0",
+  "description": "This project is a simple web application that allows users to upload their LinkedIn resume PDF, input their OpenAI API key, and convert the PDF into a well-structured HTML resume using OpenAI’s API.",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manu2576/Verbaflo_Assignment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manu2576/Verbaflo_Assignment/issues"
+  },
+  "homepage": "https://github.com/manu2576/Verbaflo_Assignment#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.61.0",
+    "pdf-parse": "^1.1.1"
+  }
+}
