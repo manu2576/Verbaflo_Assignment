@@ -3,7 +3,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
 
     const formData = new FormData();
     formData.append('pdf', document.getElementById('pdf').files[0]);
-    formData.append('apiKey', document.getElementById('api_key').value); // Use 'apiKey' here
+    formData.append('apiKey', document.getElementById('api_key').value);
 
     try {
         const response = await fetch('/api/upload', {
@@ -21,12 +21,10 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
                 document.getElementById('result').innerText = `Error: ${result.message}`;
             }
         } else {
-            // Handle unexpected content type
             const text = await response.text();
             document.getElementById('result').innerText = `Unexpected response format: ${text}`;
         }
     } catch (error) {
-        // Handle network errors or JSON parsing errors
         document.getElementById('result').innerText = `Error: ${error.message}`;
     }
 });

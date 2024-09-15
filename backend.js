@@ -22,12 +22,9 @@ function estimateTokenCount(text) {
 // Endpoint to handle file upload and OpenAI processing
 app.post('/api/upload', upload.single('pdf'), async (req, res) => {
     try {
-        console.log('Received file:', req.file);
-        
         const pdfPath = path.resolve(__dirname, 'uploads', req.file.filename);
 
         if (!fs.existsSync(pdfPath)) {
-            console.error('File not found:', pdfPath);
             return res.status(404).json({ success: false, message: 'Uploaded file not found' });
         }
 
@@ -37,7 +34,6 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
 
         const apiKey = req.body.apiKey;
         if (!apiKey) {
-            console.error('API key is missing');
             return res.status(400).json({ success: false, message: 'API key is required' });
         }
 
@@ -46,7 +42,6 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
         const tokenUsageThreshold = 0.5 * tokenLimit;
 
         if (estimatedTokenCount > tokenUsageThreshold) {
-            console.error('Token limit exceeded:', estimatedTokenCount);
             return res.status(400).json({ success: false, message: 'Text content is too large to process within the token limit.' });
         }
 
@@ -74,12 +69,22 @@ app.post('/api/upload', upload.single('pdf'), async (req, res) => {
 
         res.json({ success: true, htmlFileUrl: '/resume.html' });
     } catch (error) {
-        console.error('Error processing request:', error);
-        if (error.code === 'insufficient_quota') {
-            res.status(429).json({ success: false, message: 'OpenAI API quota exceeded. Please try again later.' });
-        } else {
-            res.status(500).json({ success: false, message: 'Error processing PDF' });
+        console.error('Error processing request:', error); // Log the error
+
+        // Handle OpenAI API errors
+        if (error.response) {
+            const status = error.response.status;
+            const message = error.response.data.error.message;
+            if (status === 401 || status === 403) {
+                return res.status(status).json({ success: false, message: `Invalid API key: ${message}` });
+            }
+            if (status === 429) {
+                return res.status(status).json({ success: false, message: 'API quota exceeded. Please try again later.' });
+            }
         }
+
+        // Handle other errors
+        res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 
