@@ -1,9 +1,8 @@
 const express = require('express');
 const multer = require('multer');
-const { OpenAI } = require('openai');
-require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
+const pdfParse = require('pdf-parse');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,50 +18,57 @@ function estimateTokenCount(text) {
     return Math.ceil(text.length / 4); // Approximate average tokens per character
 }
 
-// Endpoint to handle file upload and OpenAI processing
+// Simulated AI processing function
+function simulateAIProcessing(text) {
+    // Simulated HTML conversion
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resume</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .container { width: 80%; margin: 0 auto; }
+            h1 { font-size: 24px; }
+            p { font-size: 18px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Resume</h1>
+            <p>${text.replace(/\n/g, '<br>')}</p>
+        </div>
+    </body>
+    </html>
+    `;
+}
+
+// Endpoint to handle file upload and simulate AI processing
 app.post('/upload', upload.single('pdf'), async (req, res) => {
     try {
-        console.log(req.file);
-
         const pdfPath = path.resolve(__dirname, '../uploads', req.file.filename);
-        console.log(`Uploaded file path: ${pdfPath}`);
-
         if (!fs.existsSync(pdfPath)) {
-            console.error('File does not exist at the specified path');
             return res.status(404).json({ success: false, message: 'Uploaded file not found' });
         }
 
-        const textContent = 'Extracted text from PDF'; // Placeholder for actual text extraction
+        // Extract text from PDF
+        const pdfBuffer = fs.readFileSync(pdfPath);
+        const data = await pdfParse(pdfBuffer);
+        const textContent = data.text;
 
         // Estimate the token usage
         const estimatedTokenCount = estimateTokenCount(textContent);
-        const tokenLimit = 1500;
+        const tokenLimit = 15000;
         const tokenUsageThreshold = 0.5 * tokenLimit;
 
         if (estimatedTokenCount > tokenUsageThreshold) {
-            console.log(`Estimated token count (${estimatedTokenCount}) exceeds 50% of the token limit.`);
             return res.status(400).json({ success: false, message: 'Text content is too large to process within the token limit.' });
         }
 
-        // Initialize OpenAI with the updated API key
-        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are an expert HTML formatter. Convert the following resume text into a well-structured HTML resume.'
-                },
-                {
-                    role: 'user',
-                    content: textContent
-                }
-            ],
-            max_tokens: 1500,
-            temperature: 0.5,
-        });
-
-        const htmlContent = response.choices[0].message.content.trim();
+        // Simulate AI processing
+        const htmlContent = simulateAIProcessing(textContent);
 
         const htmlFilePath = path.join(__dirname, '../User_interface', 'resume.html');
         fs.writeFileSync(htmlFilePath, htmlContent);
@@ -70,13 +76,8 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
 
         res.json({ success: true, htmlFileUrl: '/resume.html' });
     } catch (error) {
-        if (error.code === 'insufficient_quota') {
-            console.error('OpenAI API quota exceeded:', error.message);
-            res.status(429).json({ success: false, message: 'OpenAI API quota exceeded. Please try again later.' });
-        } else {
-            console.error('Error processing PDF:', error);
-            res.status(500).json({ success: false, message: 'Error processing PDF' });
-        }
+        console.error('Error processing PDF:', error);
+        res.status(500).json({ success: false, message: 'Error processing PDF' });
     }
 });
 

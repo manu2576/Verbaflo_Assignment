@@ -3,7 +3,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
 
     const formData = new FormData();
     formData.append('pdf', document.getElementById('pdf').files[0]);
-    formData.append('api_key', document.getElementById('api_key').value);
+    formData.append('apiKey', document.getElementById('api_key').value); // Use 'apiKey' here
 
     const response = await fetch('/upload', {
         method: 'POST',
