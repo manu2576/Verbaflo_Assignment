@@ -4,7 +4,7 @@
   "description": "This project is a simple web application that allows users to upload their LinkedIn resume PDF, input their OpenAI API key, and convert the PDF into a well-structured HTML resume using OpenAI’s API.",
   "main": "backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend.js" 
   },
   "repository": {
     "type": "git",
