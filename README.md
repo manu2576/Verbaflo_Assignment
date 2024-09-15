@@ -122,6 +122,3 @@ The goal was to create a web application where users can upload their LinkedIn r
 - **Deployment**: Deploy the app to a cloud provider like Vercel or Heroku for public access.
 - **UI/UX Enhancements**: Make the UI more appealing and add progress indicators for file upload and processing.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
