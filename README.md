@@ -11,6 +11,7 @@ This project is a simple web application that allows users to upload their Linke
 - [Project Structure](#project-structure)
 - [Challenges Faced](#challenges-faced)
 - [Future Improvements](#future-improvements)
+- [License](#license)
 
 ## Problem Statement
 
@@ -69,8 +70,8 @@ The goal was to create a web application where users can upload their LinkedIn r
 ### Steps:
 1. **Clone the Repository**:
    ```bash
-   git clone [https://github.com/your-username/resume-converter.git](https://github.com/manu2576/Verbaflo_Assignment.git)
-   cd resume-converter
+   git clone https://github.com/manu2576/Verbaflo_Assignment.git
+   cd Verbaflo_Assignment
    ```
 
 2. **Install Dependencies**:
@@ -93,14 +94,16 @@ The goal was to create a web application where users can upload their LinkedIn r
 ## Project Structure
 
 ```
-├── User_interface/       # Frontend files
+├── README.md             # Project documentation
+├── User_Interface/       # Frontend files
 │   ├── index.html        # Main HTML file
-│   ├── style.css         # Stylesheet
 │   ├── script.js         # Frontend JavaScript
-├── uploads/              # Temporary PDF storage
+│   └── style.css         # Stylesheet
 ├── backend.js            # Backend server logic
 ├── package.json          # Node dependencies
-├── README.md             # Project documentation
+├── package-lock.json     # Lock file for exact dependency versions
+├── uploads/              # Temporary PDF storage
+└── vercel.json           # Vercel deployment configuration
 ```
 
 ## Challenges Faced
@@ -118,3 +121,7 @@ The goal was to create a web application where users can upload their LinkedIn r
 - **Token Estimation**: Implement a more accurate token estimation algorithm.
 - **Deployment**: Deploy the app to a cloud provider like Vercel or Heroku for public access.
 - **UI/UX Enhancements**: Make the UI more appealing and add progress indicators for file upload and processing.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
