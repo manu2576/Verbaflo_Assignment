@@ -19,7 +19,7 @@
   "homepage": "https://github.com/manu2576/Verbaflo_Assignment#readme",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.22.2",
+    "express": "^5.2.1",
     "multer": "^2.3.0",
     "openai": "^4.61.0",
     "pdf-parse": "^1.1.1"
